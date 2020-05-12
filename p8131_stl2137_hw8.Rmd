@@ -1,0 +1,36 @@
+---
+title: "p8131_stl2137_hw8"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gee)
+```
+
+```{r}
+data <- readxl::read_xlsx("/Users/SabrinaLin/Documents/Spring_20_Biostat_Methods_2/Data/HW8-HEALTH.xlsx") %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    time = as.factor(time),
+    txt = as.factor(txt),
+    health = as.factor(health),
+    agegroup = as.factor(agegroup),
+    id = group_by(id)
+  ) 
+
+health0 <- data %>% 
+  filter(
+    time == 1
+  )
+```
+
+## Part A
+(a) Evaluate the bivariate, cross-sectional relationship between randomized group assignment and participants health self-rating at the time of randomization. Interpret and discuss these findings.
+
+```{r}
+glm_model <- glm(health ~ txt, family = binomial, data = health0)
+summary(glm_model)
+```
+
